@@ -8,32 +8,49 @@ youtube = build("youtube", "v3", developerKey=YOUTUBE_API_KEY)
 
 data_store = []  # Global cache for demo purposes
 
-def fetch_videos(query, max_results=1000):
-    search_response = youtube.search().list(
-        q=query,
-        part="id,snippet",
-        type="video",
-        maxResults=max_results
-    ).execute()
-
+def fetch_videos(query, max_results=100):
     videos = []
-    for item in search_response.get("items", []):
-        if (not item["id"]["kind"] == "youtube#video"):
-            continue
-        video_id = item["id"]["videoId"]
-        stats = youtube.videos().list(
-            part="statistics,snippet",
-            id=video_id
-        ).execute()
+    next_page_token = None
 
-        for v in stats.get("items", []):
-            videos.append({
-                "title": v["snippet"]["title"],
-                "videoId": video_id,
-                "viewCount": int(v["statistics"].get("viewCount", 0)),
-                "likeCount": int(v["statistics"].get("likeCount", 0)),
-                "channelTitle": v["snippet"]["channelTitle"]
-            })
+    while len(videos) < max_results:
+        remaining = max_results - len(videos)
+        request = youtube.search().list(
+            q=query,
+            part="id,snippet",
+            type="video",
+            maxResults=min(50, remaining),
+            pageToken=next_page_token
+        )
+        response = request.execute()
+
+        for item in response.get("items", []):
+            if (not item["id"]["kind"] == "youtube#video"):
+                continue
+            
+            video_id = item.get("id", {}).get("videoId")
+            if not video_id:
+                continue
+            try:
+                stats = youtube.videos().list(
+                    part="statistics,snippet",
+                    id=video_id
+                ).execute()
+
+                for v in stats.get("items", []):
+                    videos.append({
+                        "title": v["snippet"]["title"],
+                        "videoId": video_id,
+                        "viewCount": int(v["statistics"].get("viewCount", 0)),
+                        "likeCount": int(v["statistics"].get("likeCount", 0)),
+                        "channelTitle": v["snippet"]["channelTitle"]
+                    })
+            except Exception as e:
+                print(f"Error fetching stats for {video_id}: {e}")
+
+        next_page_token = response.get("nextPageToken")
+        if not next_page_token:
+            break  # no more pages
+
     return videos
 
 @app.route("/search")
