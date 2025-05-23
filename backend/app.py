@@ -8,7 +8,7 @@ youtube = build("youtube", "v3", developerKey=YOUTUBE_API_KEY)
 
 data_store = []  # Global cache for demo purposes
 
-def fetch_videos(query, max_results=10):
+def fetch_videos(query, max_results=1000):
     search_response = youtube.search().list(
         q=query,
         part="id,snippet",
@@ -18,6 +18,8 @@ def fetch_videos(query, max_results=10):
 
     videos = []
     for item in search_response.get("items", []):
+        if (not item["id"]["kind"] == "youtube#video"):
+            continue
         video_id = item["id"]["videoId"]
         stats = youtube.videos().list(
             part="statistics,snippet",
