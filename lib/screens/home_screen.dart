@@ -57,7 +57,8 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Video Search'),
+        title: const Text('Youtube 結果搜尋與排序',
+            style: TextStyle(color: Colors.white)),
         centerTitle: true,
         backgroundColor: Colors.deepPurple,
       ),
@@ -72,7 +73,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     controller: _searchController,
                     onSubmitted: (_) => _search(),
                     decoration: InputDecoration(
-                      hintText: 'Search YouTube videos...',
+                      hintText: '搜尋...',
                       prefixIcon: const Icon(Icons.search),
                       filled: true,
                       fillColor: Colors.grey[200],
@@ -91,7 +92,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12)),
                   ),
-                  child: const Text('Go'),
+                  child: const Text(
+                    '搜尋',
+                    style: TextStyle(color: Colors.white),
+                  ),
                 ),
               ],
             ),
@@ -101,17 +105,17 @@ class _HomeScreenState extends State<HomeScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 12),
               child: Row(
                 children: [
-                  const Text("Sort by:",
+                  const Text("排序:",
                       style: TextStyle(fontWeight: FontWeight.bold)),
                   const SizedBox(width: 8),
                   ChoiceChip(
-                    label: const Text("Views"),
+                    label: const Text("觀看次數"),
                     selected: _currentSort == 'viewCount',
                     onSelected: (_) => _sort('viewCount'),
                   ),
                   const SizedBox(width: 8),
                   ChoiceChip(
-                    label: const Text("Likes"),
+                    label: const Text("按讚數"),
                     selected: _currentSort == 'likeCount',
                     onSelected: (_) => _sort('likeCount'),
                   ),
@@ -123,7 +127,7 @@ class _HomeScreenState extends State<HomeScreen> {
             child: _isLoading
                 ? const Center(child: CircularProgressIndicator())
                 : _videos.isEmpty
-                    ? const Center(child: Text('No videos found'))
+                    ? const Center(child: Text('無任何影片'))
                     : ListView.builder(
                         itemCount: _videos.length,
                         itemBuilder: (context, index) {
