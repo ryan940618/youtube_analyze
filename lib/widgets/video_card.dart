@@ -28,7 +28,9 @@ class VideoCard extends StatelessWidget {
                     size: 100, color: Colors.grey);
               },
             ),
-            const SizedBox(width: 10,),
+            const SizedBox(
+              width: 10,
+            ),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
