@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import '../models/video_item.dart';
 
 class VideoCard extends StatelessWidget {
@@ -14,21 +15,41 @@ class VideoCard extends StatelessWidget {
       elevation: 4,
       child: Padding(
         padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: Row(
           children: [
-            Text(
-              video.title,
-              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            Image.network(
+              "https://img.youtube.com/vi/${video.videoId}/mqdefault.jpg",
+              fit: BoxFit.cover,
+              loadingBuilder: (context, child, loadingProgress) {
+                if (loadingProgress == null) return child;
+                return const Center(child: CircularProgressIndicator());
+              },
+              errorBuilder: (context, error, stackTrace) {
+                return const Icon(Icons.broken_image,
+                    size: 100, color: Colors.grey);
+              },
             ),
-            const SizedBox(height: 8),
-            Text("發布者: ${video.channelTitle}",
-                style: const TextStyle(fontSize: 14)),
-            const SizedBox(height: 4),
-            Text("觀看次數: ${video.viewCount}",
-                style: const TextStyle(fontSize: 14)),
-            Text("按讚數: ${video.likeCount}",
-                style: const TextStyle(fontSize: 14)),
+            const SizedBox(width: 10,),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  video.title,
+                  style: const TextStyle(
+                      fontSize: 28, fontWeight: FontWeight.bold),
+                ),
+                Text("ID: ${video.videoId}",
+                    style: const TextStyle(fontSize: 20)),
+                const SizedBox(height: 10),
+                Text("發布者: ${video.channelTitle}",
+                    style: const TextStyle(fontSize: 18)),
+                const SizedBox(height: 8),
+                Text("觀看次數: ${video.viewCount}",
+                    style: const TextStyle(fontSize: 18)),
+                Text("按讚數: ${video.likeCount}",
+                    style: const TextStyle(fontSize: 18)),
+              ],
+            ),
           ],
         ),
       ),
