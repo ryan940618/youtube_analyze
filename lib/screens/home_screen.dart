@@ -69,6 +69,23 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  Future<void> _nthRank(int rank) async {
+    setState(() => _isLoading = true);
+
+    try {
+      final video = await ApiService.getNth(rank);
+      setState(() {
+        _videos = [];
+        _videos.add(video!);
+        _currentSort = '';
+      });
+    } catch (e) {
+      print('Search error: $e');
+    } finally {
+      setState(() => _isLoading = false);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -146,6 +163,11 @@ class _HomeScreenState extends State<HomeScreen> {
                     label: const Text("按讚數"),
                     selected: _currentSort == 'likeCount',
                     onSelected: (_) => _sort('likeCount'),
+                  ),
+                  ChoiceChip(
+                    label: const Text("特定名次"),
+                    selected: _currentSort == 'nthRank',
+                    onSelected: (_) => _nthRank(1),
                   ),
                 ],
               ),
