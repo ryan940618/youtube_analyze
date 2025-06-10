@@ -36,6 +36,25 @@ class Trie:
             node = node.children[ch]
         return node.items
 
+class SimpleLCG:
+    def __init__(self, seed=1):
+        self.m = 2**31 - 1
+        self.a = 1103515245
+        self.c = 12345
+        self.state = seed
+    
+    def rand(self):
+        self.state = (self.a * self.state + self.c) % self.m
+        return self.state
+    
+    def randint(self, low, high):
+        return low + self.rand() % (high - low + 1)
+    
+    def shuffle(self, arr):
+        n = len(arr)
+        for i in range(n-1, 0, -1):
+            j = self.randint(0, i)
+            arr[i], arr[j] = arr[j], arr[i]
 
 def build_indexes():
     global field_counter, field_trie
@@ -101,7 +120,7 @@ def fetch_videos(query, max_results=100):
     return videos
 
 
-@app.route("/search")
+@app.route("/search_")
 def search():
     query = request.args.get("query")
     if not query:
@@ -175,6 +194,31 @@ def count_prefix():
 
     return jsonify(sorted_items)
 
+@app.route("/search")
+def gen_random():
+    global data_store
+    count = 100_000
+
+    prng = SimpleLCG(seed=123456)
+
+    views = [prng.randint(0, 1_000_000) for _ in range(count)]
+    likes = [prng.randint(0, 100_000) for _ in range(count)]
+    prng.shuffle(likes)
+
+    data_store = []
+    for i in range(count):
+        v = views[i]
+        l = likes[i]
+        data_store.append({
+            "title": f"影片#{i}, 觀看數{v}讚數{l}",
+            "videoId": f"video{i}",
+            "viewCount": v,
+            "likeCount": l,
+            "channelTitle": f"頻道{i % 1000}"
+        })
+
+    build_indexes()
+    return jsonify(data_store)
 
 if __name__ == "__main__":
     app.run(debug=True)
