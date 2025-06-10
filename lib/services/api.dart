@@ -23,6 +23,18 @@ class ApiService {
     }
   }
 
+  static Future<List<VideoItem>> getGenerated() async {
+    final uri = Uri.parse('$_baseUrl/generate');
+    final response = await http.get(uri);
+
+    if (response.statusCode == 200) {
+      final List<dynamic> data = json.decode(response.body);
+      return data.map((json) => VideoItem.fromJson(json)).toList();
+    } else {
+      throw Exception('API資料載入失敗: ${response.statusCode}');
+    }
+  }
+
   static Future<List<VideoItem>> sortVideos(String by) async {
     final uri = Uri.parse('$_baseUrl/sort?by=$by');
     final response = await http.get(uri);

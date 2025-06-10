@@ -53,6 +53,22 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  Future<void> _generate() async {
+    setState(() => _isLoading = true);
+
+    try {
+      final videos = await ApiService.getGenerated();
+      setState(() {
+        _videos = videos;
+        _currentSort = '';
+      });
+    } catch (e) {
+      print('Search error: $e');
+    } finally {
+      setState(() => _isLoading = false);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -98,6 +114,18 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
               ],
+            ),
+          ),
+          ElevatedButton(
+            onPressed: _generate,
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.blue,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12)),
+            ),
+            child: const Text(
+              '產生隨機結果',
+              style: TextStyle(color: Colors.white),
             ),
           ),
           if (_videos.isNotEmpty)
