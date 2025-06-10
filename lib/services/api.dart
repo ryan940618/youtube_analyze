@@ -19,7 +19,7 @@ class ApiService {
       final List<dynamic> data = json.decode(response.body);
       return data.map((json) => VideoItem.fromJson(json)).toList();
     } else {
-      throw Exception('Failed to load videos: ${response.statusCode}');
+      throw Exception('API資料載入失敗: ${response.statusCode}');
     }
   }
 
@@ -31,7 +31,7 @@ class ApiService {
       final List<dynamic> data = json.decode(response.body);
       return data.map((json) => VideoItem.fromJson(json)).toList();
     } else {
-      throw Exception('Failed to sort videos: ${response.statusCode}');
+      throw Exception('API資料載入失敗: ${response.statusCode}');
     }
   }
 
