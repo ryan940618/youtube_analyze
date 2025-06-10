@@ -120,7 +120,7 @@ def fetch_videos(query, max_results=100):
     return videos
 
 
-@app.route("/search_")
+@app.route("/search")
 def search():
     query = request.args.get("query")
     if not query:
@@ -194,7 +194,7 @@ def count_prefix():
 
     return jsonify(sorted_items)
 
-@app.route("/search")
+@app.route("/generate")
 def gen_random():
     global data_store
     count = 100_000
