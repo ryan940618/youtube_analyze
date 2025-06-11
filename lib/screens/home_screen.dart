@@ -181,6 +181,13 @@ class _HomeScreenState extends State<HomeScreen> {
                       onSelected: (_) =>
                           _filter('nth', _currentSort, 'rank=$rank'),
                     ),
+                    const SizedBox(width: 8),
+                    ChoiceChip(
+                      label: const Text("特定前綴"),
+                      selected: _currentFilter == 'prefix',
+                      onSelected: (_) =>
+                          _filter('prefix', _currentSort, 'prefix=$rank'),
+                    ),
                     SizedBox(
                       width: 60,
                       height: 32,
@@ -188,7 +195,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         controller: _rankController,
                         keyboardType: TextInputType.number,
                         decoration: const InputDecoration(
-                          hintText: '排名',
+                          hintText: '參數',
                           contentPadding:
                               EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                           border: OutlineInputBorder(),

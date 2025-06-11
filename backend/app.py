@@ -177,7 +177,7 @@ def count_exact():
     return jsonify({"value": value, "count": count})
 
 
-@app.route("/count_prefix")
+@app.route("/prefix")
 def count_prefix():
     by = request.args.get("by", "viewCount")
     prefix = request.args.get("prefix", "")
