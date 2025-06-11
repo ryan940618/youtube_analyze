@@ -19,7 +19,15 @@ class _HomeScreenState extends State<HomeScreen> {
   String _currentArg = '';
 
   final TextEditingController _rankController = TextEditingController();
+  final TextEditingController _urlController = TextEditingController();
   int rank = 1;
+
+  @override
+  void initState() {
+    super.initState();
+    _urlController.text = ApiService.getBaseUrl();
+  }
+
   Future<void> _search() async {
     final query = _searchController.text.trim();
     if (query.isEmpty) return;
@@ -115,6 +123,31 @@ class _HomeScreenState extends State<HomeScreen> {
             style: TextStyle(color: Colors.white)),
         centerTitle: true,
         backgroundColor: Colors.deepPurple,
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(60),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: SizedBox(
+              height: 40,
+              child: TextField(
+                controller: _urlController,
+                decoration: InputDecoration(
+                  hintText: 'API位置(預設127.0.0.1:5000)',
+                  fillColor: Colors.white,
+                  filled: true,
+                  contentPadding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 0),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+                onChanged: (value) {
+                  ApiService.setBaseUrl(value);
+                },
+              ),
+            ),
+          ),
+        ),
       ),
       body: Column(
         children: [
