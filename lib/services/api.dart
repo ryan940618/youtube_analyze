@@ -35,8 +35,13 @@ class ApiService {
     }
   }
 
-  static Future<List<VideoItem>> sortVideos(String by) async {
-    final uri = Uri.parse('$_baseUrl/sort?by=$by');
+  static Future<List<VideoItem>> sortVideos(String filter, String by,
+      [String arg = '']) async {
+    String target = '$_baseUrl/$filter?by=$by';
+    if (arg.isNotEmpty) {
+      target = '$target&$arg';
+    }
+    final uri = Uri.parse(target);
     final response = await http.get(uri);
 
     if (response.statusCode == 200) {

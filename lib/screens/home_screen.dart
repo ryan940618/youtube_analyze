@@ -15,6 +15,8 @@ class _HomeScreenState extends State<HomeScreen> {
   List<VideoItem> _videos = [];
   bool _isLoading = false;
   String _currentSort = '';
+  String _currentFilter = '';
+  String _currentArg = '';
 
   Future<void> _search() async {
     final query = _searchController.text.trim();
@@ -35,16 +37,18 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  Future<void> _sort(String by) async {
+  Future<void> _filter(String filter, String by, [String arg = '']) async {
     if (_videos.isEmpty) return;
 
     setState(() => _isLoading = true);
 
     try {
-      final sorted = await ApiService.sortVideos(by);
+      final sorted = await ApiService.sortVideos(filter, by, arg);
       setState(() {
         _videos = sorted;
+        _currentFilter = filter;
         _currentSort = by;
+        _currentArg = arg;
       });
     } catch (e) {
       print('Sort error: $e');
@@ -145,7 +149,7 @@ class _HomeScreenState extends State<HomeScreen> {
               style: TextStyle(color: Colors.white),
             ),
           ),
-          if (_videos.isNotEmpty)
+          if (_videos.isNotEmpty && !_isLoading)
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 12),
               child: Row(
@@ -156,19 +160,31 @@ class _HomeScreenState extends State<HomeScreen> {
                   ChoiceChip(
                     label: const Text("觀看次數"),
                     selected: _currentSort == 'viewCount',
-                    onSelected: (_) => _sort('viewCount'),
+                    onSelected: (_) =>
+                        _filter('sort', 'viewCount', _currentArg),
                   ),
                   const SizedBox(width: 8),
                   ChoiceChip(
                     label: const Text("按讚數"),
                     selected: _currentSort == 'likeCount',
-                    onSelected: (_) => _sort('likeCount'),
+                    onSelected: (_) =>
+                        _filter('sort', 'likeCount', _currentArg),
                   ),
-                  ChoiceChip(
-                    label: const Text("特定名次"),
-                    selected: _currentSort == 'nthRank',
-                    onSelected: (_) => _nthRank(1),
-                  ),
+                  if (_currentFilter == 'sort') ...[
+                    const SizedBox(width: 8),
+                    ChoiceChip(
+                      label: const Text("由多到少"),
+                      selected: _currentArg == '',
+                      onSelected: (_) => _filter('sort', _currentSort),
+                    ),
+                    const SizedBox(width: 8),
+                    ChoiceChip(
+                      label: const Text("由少到多"),
+                      selected: _currentArg == 'order=df',
+                      onSelected: (_) =>
+                          _filter('sort', _currentSort, 'order=df'),
+                    ),
+                  ],
                 ],
               ),
             ),
