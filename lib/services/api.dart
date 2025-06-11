@@ -51,16 +51,4 @@ class ApiService {
       throw Exception('API資料載入失敗: ${response.statusCode}');
     }
   }
-
-  static Future<VideoItem?> getNth(int rank) async {
-    final uri = Uri.parse('$_baseUrl/nth?rank=$rank');
-    final response = await http.get(uri);
-
-    if (response.statusCode == 200) {
-      final Map<String, dynamic> data = json.decode(response.body);
-      return VideoItem.fromJson(data);
-    } else {
-      return null;
-    }
-  }
 }
