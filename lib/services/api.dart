@@ -51,4 +51,21 @@ class ApiService {
       throw Exception('API資料載入失敗: ${response.statusCode}');
     }
   }
+
+  static Future<dynamic> analyse(String filter, String by,
+      [String arg = '']) async {
+    String target = '$_baseUrl/$filter?by=$by';
+    if (arg.isNotEmpty) {
+      target = '$target&$arg';
+    }
+    final uri = Uri.parse(target);
+    final response = await http.get(uri);
+
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      return data;
+    } else {
+      throw Exception('API資料載入失敗: ${response.statusCode}');
+    }
+  }
 }

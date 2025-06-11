@@ -51,12 +51,39 @@ class _HomeScreenState extends State<HomeScreen> {
         _currentFilter = filter;
         _currentSort = by;
 
-        if (filter != "nth" && filter != "count_prefix") {
+        if (filter != "nth" && filter != "prefix") {
           _currentArg = arg;
         } else {
           _currentArg = '';
         }
       });
+    } catch (e) {
+      print('Sort error: $e');
+    } finally {
+      setState(() => _isLoading = false);
+    }
+  }
+
+  Future<void> _analyse(String filter, String by, [String arg = '']) async {
+    if (_videos.isEmpty) return;
+
+    setState(() => _isLoading = true);
+
+    try {
+      final result = await ApiService.analyse(filter, by, arg);
+      showDialog(
+        context: context,
+        builder: (_) => AlertDialog(
+          title: const Text('查詢結果'),
+          content: Text('指定數字：${result['value']}\n出現次數：${result['count']}'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('關閉'),
+            ),
+          ],
+        ),
+      );
     } catch (e) {
       print('Sort error: $e');
     } finally {
@@ -188,6 +215,14 @@ class _HomeScreenState extends State<HomeScreen> {
                       onSelected: (_) =>
                           _filter('prefix', _currentSort, 'prefix=$rank'),
                     ),
+                    const SizedBox(width: 8),
+                    ChoiceChip(
+                      label: const Text("特定數字出現次數"),
+                      selected: false,
+                      onSelected: (_) =>
+                          _analyse('count_exact', _currentSort, 'value=$rank'),
+                    ),
+                    const SizedBox(width: 8),
                     SizedBox(
                       width: 60,
                       height: 32,
@@ -206,6 +241,12 @@ class _HomeScreenState extends State<HomeScreen> {
                           });
                         },
                       ),
+                    ),
+                    const SizedBox(width: 8),
+                    ChoiceChip(
+                      label: const Text("出現頻率最高數字"),
+                      selected: false,
+                      onSelected: (_) => _analyse('most_common', _currentSort),
                     ),
                   ],
                 ],
