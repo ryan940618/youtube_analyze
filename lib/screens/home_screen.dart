@@ -18,6 +18,8 @@ class _HomeScreenState extends State<HomeScreen> {
   String _currentFilter = '';
   String _currentArg = '';
 
+  final TextEditingController _rankController = TextEditingController();
+  int rank = 1;
   Future<void> _search() async {
     final query = _searchController.text.trim();
     if (query.isEmpty) return;
@@ -48,7 +50,12 @@ class _HomeScreenState extends State<HomeScreen> {
         _videos = sorted;
         _currentFilter = filter;
         _currentSort = by;
-        _currentArg = arg;
+
+        if (filter != "nth" && filter != "count_prefix") {
+          _currentArg = arg;
+        } else {
+          _currentArg = '';
+        }
       });
     } catch (e) {
       print('Sort error: $e');
@@ -170,7 +177,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     onSelected: (_) =>
                         _filter('sort', 'likeCount', _currentArg),
                   ),
-                  if (_currentFilter == 'sort') ...[
+                  if (_currentSort != '') ...[
                     const SizedBox(width: 8),
                     ChoiceChip(
                       label: const Text("由多到少"),
@@ -183,6 +190,32 @@ class _HomeScreenState extends State<HomeScreen> {
                       selected: _currentArg == 'order=df',
                       onSelected: (_) =>
                           _filter('sort', _currentSort, 'order=df'),
+                    ),
+                    const SizedBox(width: 8),
+                    ChoiceChip(
+                      label: const Text("特定排名"),
+                      selected: _currentFilter == 'nth',
+                      onSelected: (_) =>
+                          _filter('nth', _currentSort, 'rank=$rank'),
+                    ),
+                    SizedBox(
+                      width: 60,
+                      height: 32,
+                      child: TextField(
+                        controller: _rankController,
+                        keyboardType: TextInputType.number,
+                        decoration: const InputDecoration(
+                          hintText: '排名',
+                          contentPadding:
+                              EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                          border: OutlineInputBorder(),
+                        ),
+                        onChanged: (value) {
+                          setState(() {
+                            rank = int.tryParse(value) ?? 1;
+                          });
+                        },
+                      ),
                     ),
                   ],
                 ],

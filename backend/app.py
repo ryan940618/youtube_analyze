@@ -150,7 +150,7 @@ def nth_highest():
 
     try:
         top_n = heapq.nlargest(rank, data_store, key=lambda x: x.get(by, 0))
-        return jsonify(top_n[-1])
+        return jsonify([top_n[-1]])
     except IndexError:
         return jsonify({"error": "Rank out of bounds"}), 400
 
