@@ -54,7 +54,7 @@ class _HomeScreenState extends State<HomeScreen> {
         if (filter != "nth" && filter != "prefix") {
           _currentArg = arg;
         } else {
-          _currentArg = '';
+          _currentArg = 'else';
         }
       });
     } catch (e) {
@@ -192,7 +192,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ChoiceChip(
                       label: const Text("由多到少"),
                       selected: _currentArg == '',
-                      onSelected: (_) => _filter('sort', _currentSort),
+                      onSelected: (_) => _filter('sort', _currentSort, ''),
                     ),
                     const SizedBox(width: 8),
                     ChoiceChip(
@@ -224,7 +224,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     const SizedBox(width: 8),
                     SizedBox(
-                      width: 60,
+                      width: 150,
                       height: 32,
                       child: TextField(
                         controller: _rankController,
@@ -232,7 +232,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         decoration: const InputDecoration(
                           hintText: '參數',
                           contentPadding:
-                              EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                              EdgeInsets.symmetric(horizontal: 1, vertical: 4),
                           border: OutlineInputBorder(),
                         ),
                         onChanged: (value) {
