@@ -2,8 +2,8 @@ To 助教: 若需要，請使用elearing上傳附件內的API Key
 Repo內的API Key因為public因素移除。  
 
 # Youtube Analyze Tool  
-一個基於Youtube搜尋結果的簡易sorting前後端實作
-Flask & Flutter
+一個基於Youtube搜尋結果的簡易sorting前後端實作  
+Flask & Flutter  
 
 ## Installation
 
