@@ -1,5 +1,7 @@
 # youtube_analyze
 
+To 助教: 若需要，請使用elearing上傳附件內的API Key
+Repo內的API Key因為public因素移除。
 A new Flutter project.
 
 ## Getting Started
