@@ -1,18 +1,19 @@
-# youtube_analyze
+To 助教: 若需要，請使用elearing上傳附件內的API Key  
+Repo內的API Key因為public因素移除。  
 
-To 助教: 若需要，請使用elearing上傳附件內的API Key
-Repo內的API Key因為public因素移除。
-A new Flutter project.
+# Youtube Analyze Tool  
+一個基於Youtube搜尋結果的簡易sorting前後端實作
+Flask & Flutter
 
-## Getting Started
+## Installation
 
-This project is a starting point for a Flutter application.
 
-A few resources to get you started if this is your first Flutter project:
+### Backend API  
+Install requirements.txt and insert your Youtube API key in config.py.  
+Run app.py, the default IP and port is localhost:5000.  
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+### Frontend Interface  
+Make sure the backend is already running, or define one by changing the IP&port target.  
+All functions including generation are implemented in the backend.  
+Nothing will work without the backend, the frontend is just a visualization.  
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
