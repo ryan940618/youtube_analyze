@@ -138,5 +138,3 @@ GET /generate
 - Endpoints like `/sort`, `/nth`, `/most_common`, etc. require a prior `/search` or `/generate` call to populate data.  
 - Only `viewCount` and `likeCount` are implemented in the frontend interface, but more options can be sorted — for details, see [YouTube API v3 documentation](https://developers.google.com/youtube/v3/docs/videos#statistics).  
 - Generated data follows the format of YouTube API search query return format.  
-```
-
